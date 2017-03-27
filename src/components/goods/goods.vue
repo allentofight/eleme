@@ -1,6 +1,6 @@
 	<template>
 		<div class="goods">
-			<div class="menu-wrapper">
+			<div class="menu-wrapper" v-el:menu-wrapper>
 				<ul>
 					<li v-for="item in goods" class="menu-item">
 						<span class="text border-1px">
@@ -9,7 +9,7 @@
 					</li>
 				</ul>
 			</div>
-			<div class="foods-wrapper">
+			<div class="foods-wrapper" v-el:foods-wrapper>
 				<ul>
 					<li v-for="item in goods" class="food-list">
 						<h1 class="title">{{item.name}}</h1>
@@ -22,12 +22,10 @@
 									<h2 class="name">{{food.name}}</h2>
 									<p class="desc">{{food.description}}</p>
 									<div class="extra">
-										<span class="count">月售{{food.sellCount}}份</span>
-										<span>好评{{food.rating}}%</span>
+										<span class="count">月售{{food.sellCount}}份</span><span>好评{{food.rating}}%</span>
 									</div>
 									<div class="price">
-										<span class="now">￥{{food.price}}</span>
-										<span class="old" v-show="food.oldPrice">￥{{food.oldPrice}}</span>
+										<span class="now">￥{{food.price}}</span><span class="old" v-show="food.oldPrice">￥{{food.oldPrice}}</span>
 									</div>
 								</div>
 							</li>
@@ -40,6 +38,8 @@
 	</template>
 
 	<script type="text/ecmascript-6">
+		import BScroll from 'better-scroll';
+
 		const ERR_OK = 0;
 
 		export default {
@@ -59,8 +59,17 @@
 					response = response.body;
 					if (response.errno === ERR_OK) {
 						this.goods = response.data;
+						this.$nextTick(() => {
+							this._initScroll();
+						});
 					}
 				});
+			},
+			methods: {
+				_initScroll() {
+					this.menuScroll = new BScroll(this.$els.menuWrapper, {});
+					this.foodScroll = new BScroll(this.$els.foodsWrapper, {});
+				}
 			}
 
 		};
@@ -145,8 +154,9 @@
 							color: rgb(147, 153, 159)
 						.desc
 							margin-bottom: 8px
+							line-height: 12px
 						.extra
-							&.count
+							.count
 								margin-right: 12px
 						.price
 							font-weight: 700
