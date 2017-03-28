@@ -2,7 +2,7 @@
 		<div class="goods">
 			<div class="menu-wrapper" v-el:menu-wrapper>
 				<ul>
-					<li v-for="item in goods" class="menu-item" :class="{'current':currentIndex===$index}">
+					<li v-for="item in goods" class="menu-item" :class="{'current':currentIndex===$index}" @click="selectMenu($index, $event)">
 						<span class="text border-1px">
 							<span v-show="item.type > 0" class="icon" :class="classMap[item.type]"></span>{{item.name}}
 						</span>
@@ -81,8 +81,19 @@
 				});
 			},
 			methods: {
+				selectMenu(index, event) {
+				// 如果我们是自己开发事件dispatch event的时候,_constructed是为true的,浏览器原生的点击事件无此属性 7-8
+					if (!event._constructed) {
+						return;
+					}
+					let foodList = this.$els.foodsWrapper.getElementsByClassName('food-list-hook');
+					let el = foodList[index];
+					this.foodScroll.scrollToElement(el, 300);
+				},
 				_initScroll() {
-					this.menuScroll = new BScroll(this.$els.menuWrapper, {});
+					this.menuScroll = new BScroll(this.$els.menuWrapper, {
+						click: true
+					});
 					this.foodScroll = new BScroll(this.$els.foodsWrapper, {
 						probeType: 3
 					});
@@ -156,6 +167,9 @@
 						vertical-align: middle
 						font-size: 12px
 						border-1px(rgba(7, 17, 27, 0.1))
+					&:last-child
+						.text
+							border-none()
 			.foods-wrapper
 				flex: 1
 				.title
