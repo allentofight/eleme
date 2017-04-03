@@ -20,7 +20,7 @@
 			<div class="cartcontrol-wrapper">
 				<cartcontrol :food="food"></cartcontrol>
 			</div>
-			<div @click="addFirst" class="buy" v-show="!food.count || food.count===0" transition="fade">加入购物车</div>
+			<div @click.stop.default="addFirst" class="buy" v-show="!food.count || food.count===0" transition="fade">加入购物车</div>
 		</div>
 	</div>
 </template>
