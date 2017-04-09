@@ -3,7 +3,6 @@ export function saveToLocal(id, key, value) {
 	if (!seller) {
 		seller = {};
 		seller[id] = {};
-		seller[id][key] = value;
 	} else {
 		seller = JSON.parse(seller);
 		if (!seller[id]) {
@@ -19,7 +18,6 @@ export function loadFromLocal(id, key, def) {
 	if (!seller) {
 		return def;
 	}
-
 	seller = JSON.parse(seller)[id];
 	if (!seller) {
 		return def;
